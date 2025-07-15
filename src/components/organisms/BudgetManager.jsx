@@ -1,25 +1,29 @@
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import ApperIcon from "@/components/ApperIcon";
-import Button from "@/components/atoms/Button";
-import Input from "@/components/atoms/Input";
 import Select from "@/components/atoms/Select";
+import Button from "@/components/atoms/Button";
 import Card from "@/components/atoms/Card";
-import Loading from "@/components/ui/Loading";
-import Error from "@/components/ui/Error";
+import Input from "@/components/atoms/Input";
+import Modal from "@/components/atoms/Modal";
 import Empty from "@/components/ui/Empty";
+import Error from "@/components/ui/Error";
+import Loading from "@/components/ui/Loading";
 import ProgressBar from "@/components/molecules/ProgressBar";
 import CategoryIcon from "@/components/molecules/CategoryIcon";
-import budgetService from "@/services/api/budgetService";
+import categoriesData from "@/services/mockData/categories.json";
+import budgetsData from "@/services/mockData/budgets.json";
+import transactionsData from "@/services/mockData/transactions.json";
+import savingsGoalsData from "@/services/mockData/savingsGoals.json";
 import categoryService from "@/services/api/categoryService";
-
+import budgetService from "@/services/api/budgetService";
 const BudgetManager = () => {
   const [budgets, setBudgets] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [showForm, setShowForm] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     category: "",
     limit: ""
@@ -67,10 +71,9 @@ const BudgetManager = () => {
         limit: parseFloat(formData.limit),
         period: "monthly"
       });
-      
-      setBudgets(prev => [...prev, newBudget]);
+setBudgets(prev => [...prev, newBudget]);
       setFormData({ category: "", limit: "" });
-      setShowForm(false);
+      setIsModalOpen(false);
       toast.success("Budget created successfully!");
     } catch (error) {
       toast.error("Failed to create budget");
@@ -125,63 +128,60 @@ const BudgetManager = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+{/* Header */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-900">Budget Management</h1>
-        <Button onClick={() => setShowForm(!showForm)}>
+        <Button onClick={() => setIsModalOpen(true)}>
           <ApperIcon name="Plus" className="w-4 h-4 mr-2" />
           Add Budget
         </Button>
       </div>
 
-      {/* Budget Form */}
-      {showForm && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          <Card className="p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Create New Budget</h2>
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Select
-                label="Category"
-                value={formData.category}
-                onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-              >
-                <option value="">Select category</option>
-                {availableCategories.map((category) => (
-                  <option key={category.Id} value={category.name}>
-                    {category.name}
-                  </option>
-                ))}
-              </Select>
+      {/* Budget Form Modal */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Create New Budget"
+        size="default"
+      >
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Select
+            label="Category"
+            value={formData.category}
+            onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+          >
+            <option value="">Select category</option>
+            {availableCategories.map((category) => (
+              <option key={category.Id} value={category.name}>
+                {category.name}
+              </option>
+            ))}
+          </Select>
 
-              <Input
-                label="Monthly Limit ($)"
-                type="number"
-                value={formData.limit}
-                onChange={(e) => setFormData(prev => ({ ...prev, limit: e.target.value }))}
-                placeholder="0.00"
-                step="0.01"
-                min="0"
-              />
+          <Input
+            label="Monthly Limit ($)"
+            type="number"
+            value={formData.limit}
+            onChange={(e) => setFormData(prev => ({ ...prev, limit: e.target.value }))}
+            placeholder="0.00"
+            step="0.01"
+            min="0"
+          />
 
-              <div className="flex items-end space-x-2">
-                <Button type="submit" className="flex-1">
-                  Create Budget
-                </Button>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  onClick={() => setShowForm(false)}
-                >
-                  Cancel
-                </Button>
-              </div>
-            </form>
-          </Card>
-        </motion.div>
-      )}
+          <div className="flex justify-end space-x-2 pt-4">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => setIsModalOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button type="submit">
+              Create Budget
+            </Button>
+          </div>
+        </form>
+      </Modal>
 
       {/* Budget List */}
       {budgets.length === 0 ? (
@@ -189,11 +189,11 @@ const BudgetManager = () => {
           title="No budgets set"
           description="Create your first budget to start tracking your spending limits"
           icon="PiggyBank"
-          action={() => setShowForm(true)}
+          action={() => setIsModalOpen(true)}
           actionLabel="Create Budget"
         />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {budgets.map((budget, index) => {
             const category = getCategoryDetails(budget.category);
             const progressColor = getProgressColor(budget.spent, budget.limit);
