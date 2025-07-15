@@ -1,0 +1,92 @@
+[
+  {
+    "Id": 1,
+    "amount": 5200,
+    "type": "income",
+    "category": "Salary",
+    "description": "Monthly salary",
+    "date": "2024-01-01",
+    "createdAt": "2024-01-01T08:00:00Z"
+  },
+  {
+    "Id": 2,
+    "amount": 45.50,
+    "type": "expense",
+    "category": "Food & Dining",
+    "description": "Lunch at downtown cafe",
+    "date": "2024-01-02",
+    "createdAt": "2024-01-02T12:30:00Z"
+  },
+  {
+    "Id": 3,
+    "amount": 89.99,
+    "type": "expense",
+    "category": "Shopping",
+    "description": "New running shoes",
+    "date": "2024-01-03",
+    "createdAt": "2024-01-03T15:45:00Z"
+  },
+  {
+    "Id": 4,
+    "amount": 1200,
+    "type": "expense",
+    "category": "Bills & Utilities",
+    "description": "Monthly rent payment",
+    "date": "2024-01-01",
+    "createdAt": "2024-01-01T09:00:00Z"
+  },
+  {
+    "Id": 5,
+    "amount": 75.25,
+    "type": "expense",
+    "category": "Transportation",
+    "description": "Gas station fill-up",
+    "date": "2024-01-04",
+    "createdAt": "2024-01-04T18:20:00Z"
+  },
+  {
+    "Id": 6,
+    "amount": 250,
+    "type": "expense",
+    "category": "Healthcare",
+    "description": "Dental checkup",
+    "date": "2024-01-05",
+    "createdAt": "2024-01-05T10:00:00Z"
+  },
+  {
+    "Id": 7,
+    "amount": 35.80,
+    "type": "expense",
+    "category": "Food & Dining",
+    "description": "Grocery shopping",
+    "date": "2024-01-06",
+    "createdAt": "2024-01-06T17:30:00Z"
+  },
+  {
+    "Id": 8,
+    "amount": 150,
+    "type": "expense",
+    "category": "Entertainment",
+    "description": "Concert tickets",
+    "date": "2024-01-07",
+    "createdAt": "2024-01-07T14:15:00Z"
+  },
+  {
+    "Id": 9,
+    "amount": 800,
+    "type": "income",
+    "category": "Freelance",
+    "description": "Web design project",
+    "date": "2024-01-08",
+    "createdAt": "2024-01-08T16:00:00Z"
+  },
+  {
+    "Id": 10,
+    "amount": 65.00,
+    "type": "expense",
+    "category": "Personal Care",
+    "description": "Haircut and styling",
+    "date": "2024-01-09",
+    "createdAt": "2024-01-09T11:30:00Z"
+  }
+]

@@ -1,0 +1,100 @@
+[
+  {
+    "Id": 1,
+    "name": "Food & Dining",
+    "type": "expense",
+    "icon": "UtensilsCrossed",
+    "color": "#F59E0B"
+  },
+  {
+    "Id": 2,
+    "name": "Transportation",
+    "type": "expense",
+    "icon": "Car",
+    "color": "#3B82F6"
+  },
+  {
+    "Id": 3,
+    "name": "Entertainment",
+    "type": "expense",
+    "icon": "Film",
+    "color": "#8B5CF6"
+  },
+  {
+    "Id": 4,
+    "name": "Shopping",
+    "type": "expense",
+    "icon": "ShoppingBag",
+    "color": "#EC4899"
+  },
+  {
+    "Id": 5,
+    "name": "Bills & Utilities",
+    "type": "expense",
+    "icon": "Receipt",
+    "color": "#EF4444"
+  },
+  {
+    "Id": 6,
+    "name": "Healthcare",
+    "type": "expense",
+    "icon": "Heart",
+    "color": "#10B981"
+  },
+  {
+    "Id": 7,
+    "name": "Education",
+    "type": "expense",
+    "icon": "GraduationCap",
+    "color": "#06B6D4"
+  },
+  {
+    "Id": 8,
+    "name": "Travel",
+    "type": "expense",
+    "icon": "Plane",
+    "color": "#F97316"
+  },
+  {
+    "Id": 9,
+    "name": "Home & Garden",
+    "type": "expense",
+    "icon": "Home",
+    "color": "#84CC16"
+  },
+  {
+    "Id": 10,
+    "name": "Personal Care",
+    "type": "expense",
+    "icon": "Sparkles",
+    "color": "#A855F7"
+  },
+  {
+    "Id": 11,
+    "name": "Salary",
+    "type": "income",
+    "icon": "DollarSign",
+    "color": "#10B981"
+  },
+  {
+    "Id": 12,
+    "name": "Freelance",
+    "type": "income",
+    "icon": "Briefcase",
+    "color": "#059669"
+  },
+  {
+    "Id": 13,
+    "name": "Investment",
+    "type": "income",
+    "icon": "TrendingUp",
+    "color": "#047857"
+  },
+  {
+    "Id": 14,
+    "name": "Other Income",
+    "type": "income",
+    "icon": "Plus",
+    "color": "#065f46"
+  }
+]
