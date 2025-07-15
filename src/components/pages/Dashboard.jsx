@@ -164,10 +164,10 @@ const getCategoryDetails = (categoryName) => {
       )}
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <StatCard
           title="Monthly Income"
-          value={`$${income.toFixed(2)}`}
+          value={`$${(income || 0).toFixed(2)}`}
           icon="TrendingUp"
           color="success"
           trend="up"
@@ -175,7 +175,7 @@ const getCategoryDetails = (categoryName) => {
         />
         <StatCard
           title="Monthly Expenses"
-          value={`$${expenses.toFixed(2)}`}
+          value={`$${(expenses || 0).toFixed(2)}`}
           icon="TrendingDown"
           color="danger"
           trend="down"
@@ -183,11 +183,11 @@ const getCategoryDetails = (categoryName) => {
         />
         <StatCard
           title="Net Savings"
-          value={`$${savings.toFixed(2)}`}
+          value={`$${(savings || 0).toFixed(2)}`}
           icon="PiggyBank"
-          color={savings >= 0 ? "success" : "danger"}
-          trend={savings >= 0 ? "up" : "down"}
-          trendValue={savings >= 0 ? "+$200" : "-$150"}
+          color={(savings || 0) >= 0 ? "success" : "danger"}
+          trend={(savings || 0) >= 0 ? "up" : "down"}
+          trendValue={(savings || 0) >= 0 ? "+$200" : "-$150"}
         />
       </div>
 
@@ -208,7 +208,7 @@ const getCategoryDetails = (categoryName) => {
                 <p>No transactions yet</p>
               </div>
             ) : (
-              recentTransactions.map((transaction, index) => {
+recentTransactions.map((transaction, index) => {
                 const category = getCategoryDetails(transaction.category);
                 
                 return (
@@ -229,7 +229,7 @@ const getCategoryDetails = (categoryName) => {
                     <span className={`font-semibold ${
                       transaction.type === "income" ? "text-success-600" : "text-red-600"
                     }`}>
-                      {transaction.type === "income" ? "+" : "-"}${transaction.amount.toFixed(2)}
+                      {transaction.type === "income" ? "+" : "-"}${(Number(transaction.amount) || 0).toFixed(2)}
                     </span>
                   </motion.div>
                 );
@@ -254,7 +254,7 @@ const getCategoryDetails = (categoryName) => {
                 <p>No budgets set</p>
               </div>
             ) : (
-              budgetStatus.slice(0, 4).map((budget, index) => (
+budgetStatus.slice(0, 4).map((budget, index) => (
                 <motion.div
                   key={budget.Id}
                   initial={{ opacity: 0, y: 10 }}
@@ -265,12 +265,12 @@ const getCategoryDetails = (categoryName) => {
                   <div className="flex justify-between items-center">
                     <span className="text-sm font-medium text-gray-700">{budget.category}</span>
                     <span className="text-sm text-gray-600">
-                      ${budget.spent.toFixed(2)} / ${budget.limit.toFixed(2)}
+                      ${(Number(budget.spent) || 0).toFixed(2)} / ${(Number(budget.limit) || 0).toFixed(2)}
                     </span>
                   </div>
                   <ProgressBar
-                    value={budget.spent}
-                    max={budget.limit}
+                    value={Number(budget.spent) || 0}
+                    max={Number(budget.limit) || 0}
                     color={budget.status}
                   />
                 </motion.div>
@@ -316,10 +316,9 @@ const getCategoryDetails = (categoryName) => {
                     color="primary"
                     showPercentage={false}
                   />
-                  
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">${goal.currentAmount.toFixed(2)}</span>
-                    <span className="text-gray-600">${goal.targetAmount.toFixed(2)}</span>
+<div className="flex justify-between text-sm">
+                    <span className="text-gray-600">${(Number(goal.currentAmount) || 0).toFixed(2)}</span>
+                    <span className="text-gray-600">${(Number(goal.targetAmount) || 0).toFixed(2)}</span>
                   </div>
                 </div>
               </motion.div>
