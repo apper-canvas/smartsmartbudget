@@ -6,6 +6,7 @@ import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
 import Card from "@/components/atoms/Card";
+import Modal from "@/components/atoms/Modal";
 import Loading from "@/components/ui/Loading";
 import Error from "@/components/ui/Error";
 import Empty from "@/components/ui/Empty";
@@ -16,7 +17,7 @@ const SavingsGoals = () => {
   const [goals, setGoals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [showForm, setShowForm] = useState(false);
+const [showModal, setShowModal] = useState(false);
   const [showAddMoney, setShowAddMoney] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -64,9 +65,9 @@ const SavingsGoals = () => {
         deadline: formData.deadline
       });
       
-      setGoals(prev => [...prev, newGoal]);
+setGoals(prev => [...prev, newGoal]);
       setFormData({ name: "", targetAmount: "", currentAmount: "", deadline: "" });
-      setShowForm(false);
+      setShowModal(false);
       toast.success("Savings goal created successfully!");
     } catch (error) {
       toast.error("Failed to create savings goal");
@@ -128,75 +129,73 @@ const SavingsGoals = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-900">Savings Goals</h1>
-        <Button onClick={() => setShowForm(!showForm)}>
+<Button onClick={() => setShowModal(true)}>
           <ApperIcon name="Plus" className="w-4 h-4 mr-2" />
           Add Goal
         </Button>
       </div>
 
-      {/* Goal Form */}
-      {showForm && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          <Card className="p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Create New Savings Goal</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input
-                  label="Goal Name"
-                  value={formData.name}
-                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  placeholder="e.g., Emergency Fund"
-                />
+{/* Goal Form Modal */}
+      <Modal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        title="Create New Savings Goal"
+        subtitle="Set up a new savings goal to track your progress"
+        size="default"
+      >
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Input
+              label="Goal Name"
+              value={formData.name}
+              onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+              placeholder="e.g., Emergency Fund"
+            />
 
-                <Input
-                  label="Target Amount ($)"
-                  type="number"
-                  value={formData.targetAmount}
-                  onChange={(e) => setFormData(prev => ({ ...prev, targetAmount: e.target.value }))}
-                  placeholder="0.00"
-                  step="0.01"
-                  min="0"
-                />
-              </div>
+            <Input
+              label="Target Amount ($)"
+              type="number"
+              value={formData.targetAmount}
+              onChange={(e) => setFormData(prev => ({ ...prev, targetAmount: e.target.value }))}
+              placeholder="0.00"
+              step="0.01"
+              min="0"
+            />
+          </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input
-                  label="Current Amount ($)"
-                  type="number"
-                  value={formData.currentAmount}
-                  onChange={(e) => setFormData(prev => ({ ...prev, currentAmount: e.target.value }))}
-                  placeholder="0.00 (optional)"
-                  step="0.01"
-                  min="0"
-                />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Input
+              label="Current Amount ($)"
+              type="number"
+              value={formData.currentAmount}
+              onChange={(e) => setFormData(prev => ({ ...prev, currentAmount: e.target.value }))}
+              placeholder="0.00 (optional)"
+              step="0.01"
+              min="0"
+            />
 
-                <Input
-                  label="Target Date"
-                  type="date"
-                  value={formData.deadline}
-                  onChange={(e) => setFormData(prev => ({ ...prev, deadline: e.target.value }))}
-                />
-              </div>
+            <Input
+              label="Target Date"
+              type="date"
+              value={formData.deadline}
+              onChange={(e) => setFormData(prev => ({ ...prev, deadline: e.target.value }))}
+            />
+          </div>
 
-              <div className="flex space-x-4">
-                <Button type="submit">
-                  Create Goal
-                </Button>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  onClick={() => setShowForm(false)}
-                >
-                  Cancel
-                </Button>
-              </div>
-            </form>
-          </Card>
-        </motion.div>
-      )}
+          <div className="flex space-x-4">
+            <Button type="submit">
+              Create Goal
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => setShowModal(false)}
+            >
+              Cancel
+            </Button>
+          </div>
+        </form>
+      </Modal>
 
       {/* Goals List */}
       {goals.length === 0 ? (
@@ -204,7 +203,7 @@ const SavingsGoals = () => {
           title="No savings goals set"
           description="Create your first savings goal to start tracking your progress towards financial milestones"
           icon="Target"
-          action={() => setShowForm(true)}
+action={() => setShowModal(true)}
           actionLabel="Create Goal"
         />
       ) : (
