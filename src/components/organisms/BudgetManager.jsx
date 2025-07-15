@@ -106,25 +106,30 @@ setBudgets(prev => [...prev, newBudget]);
 const getCategoryDetails = (categoryName) => {
     // Handle both string and object category formats
     const categoryKey = typeof categoryName === 'object' && categoryName?.Name ? categoryName.Name : categoryName;
-    const foundCategory = categories.find(cat => cat.Name === categoryKey);
+    
+    // Find category in mock data (uses "name" property) or database format (uses "Name" property)
+    const foundCategory = categories.find(cat => cat.Name === categoryKey || cat.name === categoryKey);
     
     if (foundCategory) {
+      // Ensure consistent structure with string values for safe React rendering
       return {
         Id: foundCategory.Id,
-        Name: foundCategory.Name,
-        name: foundCategory.Name,
-        icon: foundCategory.icon || "Circle",
-        color: foundCategory.color || "#6B7280",
-        type: foundCategory.type
+        Name: String(foundCategory.Name || foundCategory.name || 'Unknown'),
+        name: String(foundCategory.name || foundCategory.Name || 'Unknown'),
+        icon: String(foundCategory.icon || "Circle"),
+        color: String(foundCategory.color || "#6B7280"),
+        type: String(foundCategory.type || 'expense')
       };
     }
     
     // Fallback for unknown categories - ensure string values for safe rendering
     return {
+      Id: null,
       Name: String(categoryKey || 'Unknown'),
       name: String(categoryKey || 'Unknown'),
       icon: "Circle",
-      color: "#6B7280"
+      color: "#6B7280",
+      type: "expense"
     };
   };
 
