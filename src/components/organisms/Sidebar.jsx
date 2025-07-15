@@ -2,9 +2,11 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { NavLink, useLocation } from "react-router-dom";
 import ApperIcon from "@/components/ApperIcon";
+import CategoryModal from "@/components/organisms/CategoryModal";
 
 const Sidebar = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const location = useLocation();
 
   const navigationItems = [
@@ -54,7 +56,18 @@ const Sidebar = () => {
         ))}
       </nav>
 
-      <div className="p-4 border-t border-gray-200">
+<div className="p-4 border-t border-gray-200 space-y-3">
+        <button
+          onClick={() => {
+            setIsCategoryModalOpen(true);
+            setIsMobileOpen(false);
+          }}
+          className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-all duration-200"
+        >
+          <ApperIcon name="Settings" className="w-5 h-5" />
+          <span className="font-medium">Categories</span>
+        </button>
+        
         <div className="bg-gradient-to-r from-primary-50 to-secondary-50 p-4 rounded-lg">
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center">
@@ -107,7 +120,12 @@ const Sidebar = () => {
             </motion.div>
           </>
         )}
-      </AnimatePresence>
+</AnimatePresence>
+      
+      <CategoryModal 
+        isOpen={isCategoryModalOpen}
+        onClose={() => setIsCategoryModalOpen(false)}
+      />
     </>
   );
 };
