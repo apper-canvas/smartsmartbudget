@@ -76,10 +76,10 @@ const getCategoryDetails = (categoryName) => {
       };
     }
     
-    // Fallback for unknown categories
+    // Fallback for unknown categories - ensure string values for safe rendering
     return {
-      Name: categoryKey,
-      name: categoryKey,
+      Name: String(categoryKey || 'Unknown'),
+      name: String(categoryKey || 'Unknown'),
       icon: "Circle",
       color: "#6B7280"
     };
