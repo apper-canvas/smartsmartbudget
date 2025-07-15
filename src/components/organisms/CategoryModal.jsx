@@ -214,7 +214,7 @@ const CategoryModal = ({ isOpen, onClose }) => {
                             />
                           </div>
                           <div>
-                            <h3 className="font-medium text-gray-900">{category.name}</h3>
+<h3 className="font-medium text-gray-900">{category.Name}</h3>
                             <Badge 
                               variant={category.type === 'income' ? 'success' : 'default'}
                               className="text-xs"

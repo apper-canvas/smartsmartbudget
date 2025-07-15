@@ -109,8 +109,9 @@ const Dashboard = () => {
     });
   };
 
-  const getCategoryDetails = (categoryName) => {
-    return data.categories.find(cat => cat.name === categoryName) || {
+const getCategoryDetails = (categoryName) => {
+    return data.categories.find(cat => cat.Name === categoryName) || {
+      Name: categoryName,
       name: categoryName,
       icon: "Circle",
       color: "#6B7280"

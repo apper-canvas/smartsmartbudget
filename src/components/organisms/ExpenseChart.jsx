@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Chart from "react-apexcharts";
 import ApperIcon from "@/components/ApperIcon";
-import Card from "@/components/atoms/Card";
 import Select from "@/components/atoms/Select";
-import Loading from "@/components/ui/Loading";
+import Card from "@/components/atoms/Card";
 import Error from "@/components/ui/Error";
-import transactionService from "@/services/api/transactionService";
+import Loading from "@/components/ui/Loading";
 import categoryService from "@/services/api/categoryService";
+import transactionService from "@/services/api/transactionService";
 
 const ExpenseChart = () => {
   const [transactions, setTransactions] = useState([]);
@@ -74,9 +74,10 @@ const ExpenseChart = () => {
       categoryTotals[category] = (categoryTotals[category] || 0) + transaction.amount;
     });
 
-    return Object.entries(categoryTotals)
+return Object.entries(categoryTotals)
       .map(([category, amount]) => {
-        const categoryInfo = categories.find(cat => cat.name === category) || {
+        const categoryInfo = categories.find(cat => cat.Name === category) || {
+          Name: category,
           name: category,
           color: "#6B7280"
         };

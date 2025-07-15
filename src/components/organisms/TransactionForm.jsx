@@ -29,11 +29,11 @@ const TransactionForm = ({ onTransactionAdded, onClose }) => {
   const loadCategories = async () => {
     try {
       const allCategories = await categoryService.getAll();
-      const filteredCategories = allCategories.filter(cat => cat.type === formData.type);
+const filteredCategories = allCategories.filter(cat => cat.type === formData.type);
       setCategories(filteredCategories);
       
-      // Reset category selection when type changes
-      if (formData.category && !filteredCategories.find(cat => cat.name === formData.category)) {
+// Reset category selection when type changes
+      if (formData.category && !filteredCategories.find(cat => cat.Name === formData.category)) {
         setFormData(prev => ({ ...prev, category: "" }));
       }
     } catch (error) {
@@ -166,9 +166,9 @@ const TransactionForm = ({ onTransactionAdded, onClose }) => {
             error={errors.category}
           >
             <option value="">Select category</option>
-            {categories.map((category) => (
-              <option key={category.Id} value={category.name}>
-                {category.name}
+{categories.map((category) => (
+              <option key={category.Id} value={category.Name}>
+                {category.Name}
               </option>
             ))}
           </Select>

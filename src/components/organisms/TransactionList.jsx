@@ -57,8 +57,9 @@ const TransactionList = ({ refresh = 0 }) => {
     }
   };
 
-  const getCategoryDetails = (categoryName) => {
-    return categories.find(cat => cat.name === categoryName) || {
+const getCategoryDetails = (categoryName) => {
+    return categories.find(cat => cat.Name === categoryName) || {
+      Name: categoryName,
       name: categoryName,
       icon: "Circle",
       color: "#6B7280"
@@ -94,10 +95,10 @@ const TransactionList = ({ refresh = 0 }) => {
             onChange={(e) => setCategoryFilter(e.target.value)}
             className="sm:w-48"
           >
-            <option value="all">All Categories</option>
+<option value="all">All Categories</option>
             {categories.map((category) => (
-              <option key={category.Id} value={category.name}>
-                {category.name}
+              <option key={category.Id} value={category.Name}>
+                {category.Name}
               </option>
             ))}
           </Select>

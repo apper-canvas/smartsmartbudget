@@ -1,15 +1,16 @@
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { format, parseISO } from "date-fns";
 import { toast } from "react-toastify";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
-import Input from "@/components/atoms/Input";
 import Card from "@/components/atoms/Card";
+import Input from "@/components/atoms/Input";
 import Modal from "@/components/atoms/Modal";
-import Loading from "@/components/ui/Loading";
-import Error from "@/components/ui/Error";
 import Empty from "@/components/ui/Empty";
+import Error from "@/components/ui/Error";
+import Loading from "@/components/ui/Loading";
+import Goals from "@/components/pages/Goals";
 import ProgressBar from "@/components/molecules/ProgressBar";
 import savingsGoalService from "@/services/api/savingsGoalService";
 
@@ -236,7 +237,7 @@ action={() => setShowModal(true)}
                         />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900">{goal.name}</h3>
+<h3 className="font-semibold text-gray-900">{goal.Name}</h3>
                         <p className="text-sm text-gray-600">
                           Due {format(parseISO(goal.deadline), "MMM d, yyyy")}
                         </p>
@@ -256,14 +257,14 @@ action={() => setShowModal(true)}
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-gray-600">Progress</span>
-                      <span className="font-semibold text-gray-900">
-                        ${goal.currentAmount.toFixed(2)} / ${goal.targetAmount.toFixed(2)}
+<span className="font-semibold text-gray-900">
+                        ${goal.current_amount.toFixed(2)} / ${goal.target_amount.toFixed(2)}
                       </span>
                     </div>
 
-                    <ProgressBar
-                      value={goal.currentAmount}
-                      max={goal.targetAmount}
+<ProgressBar
+                      value={goal.current_amount}
+                      max={goal.target_amount}
                       color={progressColor}
                       showPercentage={true}
                     />
@@ -271,8 +272,8 @@ action={() => setShowModal(true)}
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
                         <span className="text-gray-600">Remaining</span>
-                        <p className="font-semibold text-gray-900">
-                          ${remaining.toFixed(2)}
+<p className="font-semibold text-gray-900">
+                          ${(goal.target_amount - goal.current_amount).toFixed(2)}
                         </p>
                       </div>
                       <div>
@@ -298,7 +299,7 @@ action={() => setShowModal(true)}
                               step="0.01"
                               min="0"
                             />
-                            <div className="flex space-x-2">
+<div className="flex space-x-2">
                               <Button
                                 size="sm"
                                 onClick={() => handleAddMoney(goal.Id)}

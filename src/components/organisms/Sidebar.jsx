@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { NavLink, useLocation } from "react-router-dom";
 import ApperIcon from "@/components/ApperIcon";
 import CategoryModal from "@/components/organisms/CategoryModal";
+import { AuthContext } from "@/App";
 
 const Sidebar = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const location = useLocation();
+  const { logout } = useContext(AuthContext);
 
   const navigationItems = [
     { name: "Dashboard", href: "/", icon: "LayoutDashboard" },
@@ -66,6 +68,17 @@ const Sidebar = () => {
         >
           <ApperIcon name="Settings" className="w-5 h-5" />
           <span className="font-medium">Categories</span>
+        </button>
+        
+        <button
+          onClick={() => {
+            logout();
+            setIsMobileOpen(false);
+          }}
+          className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-all duration-200"
+        >
+          <ApperIcon name="LogOut" className="w-5 h-5" />
+          <span className="font-medium">Logout</span>
         </button>
         
         <div className="bg-gradient-to-r from-primary-50 to-secondary-50 p-4 rounded-lg">

@@ -12,10 +12,6 @@ import Error from "@/components/ui/Error";
 import Loading from "@/components/ui/Loading";
 import ProgressBar from "@/components/molecules/ProgressBar";
 import CategoryIcon from "@/components/molecules/CategoryIcon";
-import categoriesData from "@/services/mockData/categories.json";
-import budgetsData from "@/services/mockData/budgets.json";
-import transactionsData from "@/services/mockData/transactions.json";
-import savingsGoalsData from "@/services/mockData/savingsGoals.json";
 import categoryService from "@/services/api/categoryService";
 import budgetService from "@/services/api/budgetService";
 const BudgetManager = () => {
@@ -104,8 +100,9 @@ setBudgets(prev => [...prev, newBudget]);
     }
   };
 
-  const getCategoryDetails = (categoryName) => {
-    return categories.find(cat => cat.name === categoryName) || {
+const getCategoryDetails = (categoryName) => {
+    return categories.find(cat => cat.Name === categoryName) || {
+      Name: categoryName,
       name: categoryName,
       icon: "Circle",
       color: "#6B7280"
@@ -119,8 +116,8 @@ setBudgets(prev => [...prev, newBudget]);
     return "success";
   };
 
-  const availableCategories = categories.filter(
-    cat => !budgets.find(budget => budget.category === cat.name)
+const availableCategories = categories.filter(
+    cat => !budgets.find(budget => budget.category === cat.Name)
   );
 
   if (loading) return <Loading />;
@@ -151,9 +148,9 @@ setBudgets(prev => [...prev, newBudget]);
             onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
           >
             <option value="">Select category</option>
-            {availableCategories.map((category) => (
-              <option key={category.Id} value={category.name}>
-                {category.name}
+{availableCategories.map((category) => (
+              <option key={category.Id} value={category.Name}>
+                {category.Name}
               </option>
             ))}
           </Select>

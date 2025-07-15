@@ -1,63 +1,222 @@
-import savingsGoalsData from "@/services/mockData/savingsGoals.json";
-
 class SavingsGoalService {
   constructor() {
-    this.savingsGoals = [...savingsGoalsData];
+    this.apperClient = null;
+    this.initializeClient();
+  }
+
+  initializeClient() {
+    if (typeof window !== 'undefined' && window.ApperSDK) {
+      const { ApperClient } = window.ApperSDK;
+      this.apperClient = new ApperClient({
+        apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+        apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+      });
+    }
   }
 
   async getAll() {
-    await this.delay();
-    return [...this.savingsGoals];
+    try {
+      if (!this.apperClient) this.initializeClient();
+      
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "target_amount" } },
+          { field: { Name: "current_amount" } },
+          { field: { Name: "deadline" } }
+        ]
+      };
+
+      const response = await this.apperClient.fetchRecords("savings_goal", params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        return [];
+      }
+
+      return response.data || [];
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error fetching savings goals:", error?.response?.data?.message);
+      } else {
+        console.error(error.message);
+      }
+      return [];
+    }
   }
 
   async getById(id) {
-    await this.delay();
-    return this.savingsGoals.find(goal => goal.Id === parseInt(id));
+    try {
+      if (!this.apperClient) this.initializeClient();
+      
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "target_amount" } },
+          { field: { Name: "current_amount" } },
+          { field: { Name: "deadline" } }
+        ]
+      };
+
+      const response = await this.apperClient.getRecordById("savings_goal", id, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        return null;
+      }
+
+      return response.data;
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error(`Error fetching savings goal with ID ${id}:`, error?.response?.data?.message);
+      } else {
+        console.error(error.message);
+      }
+      return null;
+    }
   }
 
   async create(goalData) {
-    await this.delay();
-    const newGoal = {
-      ...goalData,
-      Id: Math.max(...this.savingsGoals.map(g => g.Id)) + 1,
-      currentAmount: goalData.currentAmount || 0
-    };
-    this.savingsGoals.push(newGoal);
-    return { ...newGoal };
+    try {
+      if (!this.apperClient) this.initializeClient();
+      
+      const params = {
+        records: [
+          {
+            Name: goalData.name,
+            target_amount: goalData.targetAmount,
+            current_amount: goalData.currentAmount || 0,
+            deadline: goalData.deadline
+          }
+        ]
+      };
+
+      const response = await this.apperClient.createRecord("savings_goal", params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message);
+      }
+
+      if (response.results) {
+        const successfulRecords = response.results.filter(result => result.success);
+        const failedRecords = response.results.filter(result => !result.success);
+        
+        if (failedRecords.length > 0) {
+          console.error(`Failed to create ${failedRecords.length} records:${JSON.stringify(failedRecords)}`);
+        }
+        
+        return successfulRecords.length > 0 ? successfulRecords[0].data : null;
+      }
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error creating savings goal:", error?.response?.data?.message);
+      } else {
+        console.error(error.message);
+      }
+      throw error;
+    }
   }
 
   async update(id, goalData) {
-    await this.delay();
-    const index = this.savingsGoals.findIndex(goal => goal.Id === parseInt(id));
-    if (index !== -1) {
-      this.savingsGoals[index] = { ...this.savingsGoals[index], ...goalData };
-      return { ...this.savingsGoals[index] };
+    try {
+      if (!this.apperClient) this.initializeClient();
+      
+      const params = {
+        records: [
+          {
+            Id: id,
+            Name: goalData.name,
+            target_amount: goalData.targetAmount,
+            current_amount: goalData.currentAmount,
+            deadline: goalData.deadline
+          }
+        ]
+      };
+
+      const response = await this.apperClient.updateRecord("savings_goal", params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message);
+      }
+
+      if (response.results) {
+        const successfulUpdates = response.results.filter(result => result.success);
+        const failedUpdates = response.results.filter(result => !result.success);
+        
+        if (failedUpdates.length > 0) {
+          console.error(`Failed to update ${failedUpdates.length} records:${JSON.stringify(failedUpdates)}`);
+        }
+        
+        return successfulUpdates.length > 0 ? successfulUpdates[0].data : null;
+      }
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error updating savings goal:", error?.response?.data?.message);
+      } else {
+        console.error(error.message);
+      }
+      throw error;
     }
-    throw new Error("Savings goal not found");
   }
 
   async addToGoal(id, amount) {
-    await this.delay();
-    const goal = this.savingsGoals.find(g => g.Id === parseInt(id));
-    if (goal) {
-      goal.currentAmount = Math.min(goal.targetAmount, goal.currentAmount + amount);
-      return { ...goal };
+    try {
+      const goal = await this.getById(id);
+      if (goal) {
+        const newAmount = Math.min(goal.target_amount, goal.current_amount + amount);
+        return await this.update(id, { 
+          name: goal.Name,
+          targetAmount: goal.target_amount,
+          currentAmount: newAmount,
+          deadline: goal.deadline
+        });
+      }
+      throw new Error("Savings goal not found");
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error adding to savings goal:", error?.response?.data?.message);
+      } else {
+        console.error(error.message);
+      }
+      throw error;
     }
-    throw new Error("Savings goal not found");
   }
 
   async delete(id) {
-    await this.delay();
-    const index = this.savingsGoals.findIndex(goal => goal.Id === parseInt(id));
-    if (index !== -1) {
-      this.savingsGoals.splice(index, 1);
-      return true;
-    }
-    throw new Error("Savings goal not found");
-  }
+    try {
+      if (!this.apperClient) this.initializeClient();
+      
+      const params = {
+        RecordIds: [id]
+      };
 
-  delay() {
-    return new Promise(resolve => setTimeout(resolve, Math.random() * 300 + 200));
+      const response = await this.apperClient.deleteRecord("savings_goal", params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message);
+      }
+
+      if (response.results) {
+        const successfulDeletions = response.results.filter(result => result.success);
+        const failedDeletions = response.results.filter(result => !result.success);
+        
+        if (failedDeletions.length > 0) {
+          console.error(`Failed to delete ${failedDeletions.length} records:${JSON.stringify(failedDeletions)}`);
+        }
+        
+        return successfulDeletions.length > 0;
+      }
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error deleting savings goal:", error?.response?.data?.message);
+      } else {
+        console.error(error.message);
+      }
+      throw error;
+    }
   }
 }
 
