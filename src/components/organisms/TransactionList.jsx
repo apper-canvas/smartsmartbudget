@@ -60,7 +60,24 @@ const TransactionList = ({ refresh = 0 }) => {
 const getCategoryDetails = (categoryName) => {
     // Handle both string and object category formats
     const categoryKey = typeof categoryName === 'object' && categoryName?.Name ? categoryName.Name : categoryName;
-    return categories.find(cat => cat.Name === categoryKey) || {
+    
+    // Find category in mock data (uses "name" property) or database format (uses "Name" property)
+    const foundCategory = categories.find(cat => cat.Name === categoryKey || cat.name === categoryKey);
+    
+    if (foundCategory) {
+      // Ensure consistent structure with both "name" and "Name" properties
+      return {
+        Id: foundCategory.Id,
+        Name: foundCategory.Name || foundCategory.name,
+        name: foundCategory.name || foundCategory.Name,
+        icon: foundCategory.icon || "Circle",
+        color: foundCategory.color || "#6B7280",
+        type: foundCategory.type
+      };
+    }
+    
+    // Fallback for unknown categories
+    return {
       Name: categoryKey,
       name: categoryKey,
       icon: "Circle",
