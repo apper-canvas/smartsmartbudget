@@ -55,8 +55,11 @@ const BudgetManager = () => {
     }
 
     // Check if budget already exists for this category
-    const existingBudget = budgets.find(b => b.category === formData.category);
-if (existingBudget) {
+const existingBudget = budgets.find(b => {
+      const budgetCategory = typeof b.category === 'object' && b.category?.Name ? b.category.Name : b.category;
+      return budgetCategory === formData.category;
+    });
+    if (existingBudget) {
       toast.error("Budget already exists for this category");
       return;
     }
@@ -101,9 +104,11 @@ setBudgets(prev => [...prev, newBudget]);
   };
 
 const getCategoryDetails = (categoryName) => {
-    return categories.find(cat => cat.Name === categoryName) || {
-      Name: categoryName,
-      name: categoryName,
+    // Handle both string and object category formats
+    const categoryKey = typeof categoryName === 'object' && categoryName?.Name ? categoryName.Name : categoryName;
+    return categories.find(cat => cat.Name === categoryKey) || {
+      Name: categoryKey,
+      name: categoryKey,
       icon: "Circle",
       color: "#6B7280"
     };

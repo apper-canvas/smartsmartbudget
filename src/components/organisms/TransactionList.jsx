@@ -58,9 +58,11 @@ const TransactionList = ({ refresh = 0 }) => {
   };
 
 const getCategoryDetails = (categoryName) => {
-    return categories.find(cat => cat.Name === categoryName) || {
-      Name: categoryName,
-      name: categoryName,
+    // Handle both string and object category formats
+    const categoryKey = typeof categoryName === 'object' && categoryName?.Name ? categoryName.Name : categoryName;
+    return categories.find(cat => cat.Name === categoryKey) || {
+      Name: categoryKey,
+      name: categoryKey,
       icon: "Circle",
       color: "#6B7280"
     };
