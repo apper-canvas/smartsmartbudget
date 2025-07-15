@@ -66,9 +66,10 @@ const getCategoryDetails = (categoryName) => {
     };
   };
 
-  const filteredTransactions = transactions.filter(transaction => {
+const filteredTransactions = transactions.filter(transaction => {
     const typeMatch = filter === "all" || transaction.type === filter;
-    const categoryMatch = categoryFilter === "all" || transaction.category === categoryFilter;
+    const category = getCategoryDetails(transaction.category);
+    const categoryMatch = categoryFilter === "all" || category.Name === categoryFilter;
     return typeMatch && categoryMatch;
   });
 
@@ -115,7 +116,7 @@ const getCategoryDetails = (categoryName) => {
         />
       ) : (
         <div className="space-y-4">
-          {filteredTransactions.map((transaction, index) => {
+{filteredTransactions.map((transaction, index) => {
             const category = getCategoryDetails(transaction.category);
             
             return (
@@ -141,7 +142,7 @@ const getCategoryDetails = (categoryName) => {
                             {transaction.type}
                           </Badge>
                           <span className="text-sm text-gray-600">
-                            {transaction.category}
+                            {category.Name}
                           </span>
                           <span className="text-sm text-gray-500">
                             {format(parseISO(transaction.date), "MMM d, yyyy")}

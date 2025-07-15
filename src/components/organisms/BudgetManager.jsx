@@ -56,7 +56,7 @@ const BudgetManager = () => {
 
     // Check if budget already exists for this category
     const existingBudget = budgets.find(b => b.category === formData.category);
-    if (existingBudget) {
+if (existingBudget) {
       toast.error("Budget already exists for this category");
       return;
     }
@@ -117,7 +117,10 @@ const getCategoryDetails = (categoryName) => {
   };
 
 const availableCategories = categories.filter(
-    cat => !budgets.find(budget => budget.category === cat.Name)
+    cat => !budgets.find(budget => {
+      const budgetCategory = getCategoryDetails(budget.category);
+      return budgetCategory.Name === cat.Name;
+    })
   );
 
   if (loading) return <Loading />;
@@ -191,7 +194,7 @@ const availableCategories = categories.filter(
         />
       ) : (
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {budgets.map((budget, index) => {
+{budgets.map((budget, index) => {
             const category = getCategoryDetails(budget.category);
             const progressColor = getProgressColor(budget.spent, budget.limit);
             const remaining = Math.max(0, budget.limit - budget.spent);
@@ -209,7 +212,7 @@ const availableCategories = categories.filter(
                     <div className="flex items-center space-x-3">
                       <CategoryIcon category={category} />
                       <div>
-                        <h3 className="font-semibold text-gray-900">{budget.category}</h3>
+                        <h3 className="font-semibold text-gray-900">{category.Name}</h3>
                         <p className="text-sm text-gray-600">Monthly Budget</p>
                       </div>
                     </div>
